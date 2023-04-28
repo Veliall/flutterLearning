@@ -15,6 +15,10 @@ class FlexScreen extends StatelessWidget {
           _buildExpanded(context),
           ..._header(context, 'Flexible'),
           _buildFlexible(context),
+          Expanded(
+            child: Container(),
+          ),
+          _buildFooter(context)
         ],
       ),
     );
@@ -31,10 +35,10 @@ class FlexScreen extends StatelessWidget {
   }
 
   _buildExpanded(BuildContext context) {
-    return const SizedBox(
+    return SizedBox(
       height: 100,
       child: Row(
-        children: [
+        children: const [
           LabeledContainer(
             width: 100,
             color: Colors.green,
@@ -54,10 +58,54 @@ class FlexScreen extends StatelessWidget {
   }
 
   _buildFlexible(BuildContext context) {
-    return Container();
+    return SizedBox(
+      height: 100,
+      child: Row(
+        children: const [
+          Flexible(
+            flex: 1,
+            child: LabeledContainer(
+              color: Colors.orange,
+              text: '25%',
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: LabeledContainer(
+              color: Colors.deepOrange,
+              text: '25%',
+            ),
+          ),
+          Flexible(
+            flex: 2,
+            child: LabeledContainer(
+              color: Colors.blue,
+              text: '50%',
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   _buildFooter(BuildContext context) {
-    return Container();
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.yellow,
+          borderRadius: BorderRadius.circular(40),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 15.0,
+            horizontal: 30,
+          ),
+          child: Text(
+            'Pinned to the bottom',
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+        ),
+      ),
+    );
   }
 }
