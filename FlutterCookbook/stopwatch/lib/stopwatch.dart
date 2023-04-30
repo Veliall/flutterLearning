@@ -10,16 +10,9 @@ class StopWatch extends StatefulWidget {
 }
 
 class _StopWatchState extends State<StopWatch> {
-  late int seconds;
+  bool isTicking = false;
+  int seconds = 0;
   late Timer timer;
-
-  @override
-  void initState() {
-    super.initState();
-
-    seconds = 0;
-    timer = Timer.periodic(Duration(seconds: 1), _onTick);
-  }
 
   void _onTick(Timer time) {
     setState(() {
@@ -33,13 +26,63 @@ class _StopWatchState extends State<StopWatch> {
       appBar: AppBar(
         title: const Text('Stopwatch'),
       ),
-      body: Center(
-        child: Text(
-          '$seconds ${_secondsTex()}',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '$seconds ${_secondsTex()}',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.green),
+                  foregroundColor: MaterialStateProperty.all(Colors.white),
+                ),
+                onPressed: () => _startTimer(),
+                child: const Text('Start'),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                  onPressed: () => _stopTimer(),
+                  child: const Text('Stop'))
+            ],
+          )
+        ],
       ),
     );
+  }
+
+  void _startTimer() {
+    if (isTicking) return;
+
+    timer = Timer.periodic(const Duration(seconds: 1), _onTick);
+
+    setState(() {
+      seconds = 0;
+      isTicking = true;
+    });
+  }
+
+  void _stopTimer() {
+    if (!isTicking) return;
+
+    timer.cancel();
+
+    setState(() {
+      isTicking = false;
+    });
   }
 
   String _secondsTex() => seconds == 1 ? 'second' : 'seconds';
